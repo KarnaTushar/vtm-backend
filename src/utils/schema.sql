@@ -18,3 +18,18 @@ CREATE TABLE vehicle (
     puc_certificate VARCHAR(255),
     insurance_certificate VARCHAR(255)
 );
+
+
+-- Create the Transfer table
+CREATE TABLE transfer (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fromDriverId INT NULL,
+    toDriverId INT NULL,
+    vehicleId INT NOT NULL,
+    transferDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    toEntity VARCHAR(255) NULL,
+    active BOOLEAN NOT NULL,
+    FOREIGN KEY (fromDriverId) REFERENCES driver(id),
+    FOREIGN KEY (toDriverId) REFERENCES driver(id),
+    FOREIGN KEY (vehicleId) REFERENCES vehicle(id)
+);

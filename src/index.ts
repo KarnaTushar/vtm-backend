@@ -1,28 +1,22 @@
-// src/index.ts
+// src/app.ts
 import "reflect-metadata";
-import express, { Express, Request, Response } from "express";
+import express from "express";
 import { AppDataSource } from "./data-source";
 import driverRoutes from "./routes/driverRoutes";
-// import vehicleRoutes from "./routes/vehicleRoutes";
+import vehicleRoutes from "./routes/vehicleRoutes";
+import transferRoutes from "./routes/transferRoutes";
 
+const app = express();
 const PORT = 3000;
-const app: Express = express();
 
 app.use(express.json());
 
-AppDataSource.initialize()
-  .then(() => {
-    console.log("Connected to the database");
+app.use("/drivers", driverRoutes);
+app.use("/vehicles", vehicleRoutes);
+app.use("/transfers", transferRoutes);
 
-    app.use("/drivers", driverRoutes);
-    // app.use("/vehicles", vehicleRoutes);
-
-    app.get("/", (req: Request, res: Response) => {
-      res.send("ALL Ok with TS and tsc watch");
-    });
-
-    app.listen(PORT, () => {
-      console.log("Listening on port ", PORT);
-    });
-  })
-  .catch((error) => console.log("Database connection error: ", error));
+AppDataSource.initialize().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}).catch(error => console.log(error));
